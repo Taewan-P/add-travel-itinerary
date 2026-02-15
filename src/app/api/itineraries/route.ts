@@ -27,7 +27,12 @@ export async function POST(request: Request) {
   try {
     const user = await requireAuthorizedUser();
 
-    const body = (await request.json()) as unknown;
+    let body: unknown;
+    try {
+      body = (await request.json()) as unknown;
+    } catch {
+      return NextResponse.json({ error: "Malformed JSON body" }, { status: 400 });
+    }
     const parsed = createItinerarySchema.safeParse(body);
 
     if (!parsed.success) {

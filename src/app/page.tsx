@@ -22,7 +22,7 @@ export default async function HomePage() {
 
   let recentCount = 0;
   try {
-    const recent = await listItineraries(session.user.email);
+    const recent = await listItineraries(session.user.email.toLowerCase());
     recentCount = recent.length;
   } catch {
     recentCount = 0;

@@ -14,7 +14,7 @@ export default async function HistoryPage() {
     );
   }
 
-  const items = await listItineraries(session.user.email);
+  const items = await listItineraries(session.user.email.toLowerCase());
 
   return <HistoryList initialItems={items} />;
 }

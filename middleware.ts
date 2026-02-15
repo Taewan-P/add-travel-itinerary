@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
+import { getAllowedEmail } from "@/lib/config";
 
 const PUBLIC_PATHS = new Set(["/auth/signin"]);
 
@@ -25,7 +26,7 @@ export default auth((req) => {
     return NextResponse.redirect(signInUrl);
   }
 
-  const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
+  const allowedEmail = getAllowedEmail();
   const currentEmail = req.auth.user.email.toLowerCase();
 
   if (!allowedEmail || currentEmail !== allowedEmail) {

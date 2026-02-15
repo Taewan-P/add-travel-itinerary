@@ -7,14 +7,11 @@ import {
   type ItineraryRepository,
 } from "@/lib/itinerary-repository";
 import { sendEmailViaResend } from "@/lib/resend";
-import { createItinerarySchema, type CreateItineraryInput } from "@/lib/validation";
-
-export type CreateItineraryResponse = {
-  itineraryId: string;
-  deliveryStatus: "sent" | "failed";
-  messageId?: string;
-  error?: string;
-};
+import {
+  createItinerarySchema,
+  type CreateItineraryInput,
+  type CreateItineraryResponse,
+} from "@/lib/validation";
 
 export type ItineraryListItem = {
   id: string;
@@ -102,17 +99,27 @@ export async function listItineraries(
   deps: ServiceDependencies = defaultServiceDependencies
 ): Promise<ItineraryListItem[]> {
   const rows = await deps.repository.listByEmail(email);
-  return rows.map((row) => ({
-    id: row.id,
-    kind: row.kind,
-    payload: createItinerarySchema.parse(JSON.parse(row.payloadJson)),
-    recipientEmail: row.recipientEmail,
-    deliveryStatus: row.deliveryStatus,
-    providerMessageId: row.providerMessageId,
-    lastError: row.lastError,
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-  }));
+  return rows.reduce<ItineraryListItem[]>((items, row) => {
+    const parsed = createItinerarySchema.safeParse(JSON.parse(row.payloadJson));
+    if (!parsed.success) {
+      console.warn(`Skipping itinerary ${row.id}: payload schema validation failed`);
+      return items;
+    }
+
+    items.push({
+      id: row.id,
+      kind: row.kind,
+      payload: parsed.data,
+      recipientEmail: row.recipientEmail,
+      deliveryStatus: row.deliveryStatus,
+      providerMessageId: row.providerMessageId,
+      lastError: row.lastError,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    });
+
+    return items;
+  }, []);
 }
 
 export async function resendItinerary(

@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { getAllowedEmail } from "@/lib/config";
 
 export class HttpError extends Error {
   status: number;
@@ -21,7 +22,7 @@ export async function requireAuthorizedUser(): Promise<AuthorizedUser> {
     throw new HttpError(401, "Not authenticated");
   }
 
-  const allowedEmail = process.env.ALLOWED_EMAIL?.toLowerCase();
+  const allowedEmail = getAllowedEmail();
   const email = session.user.email.toLowerCase();
 
   if (!allowedEmail || email !== allowedEmail) {

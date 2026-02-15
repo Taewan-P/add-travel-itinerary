@@ -19,7 +19,7 @@ export const flightItinerarySchema = z.object({
     .string()
     .trim()
     .toUpperCase()
-    .regex(/^[A-Z0-9]{2}$/i, "Airline IATA code must be 2 characters"),
+    .regex(/^[A-Z0-9]{2}$/, "Airline IATA code must be 2 characters"),
   flightNumber: nonEmptyString,
   departureAirportName: nonEmptyString,
   departureAirportIata: z

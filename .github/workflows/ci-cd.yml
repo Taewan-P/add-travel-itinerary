@@ -55,6 +55,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Validate wrangler D1 configuration
+        run: |
+          if grep -q 'REPLACE_WITH_D1_DATABASE_ID' wrangler.jsonc; then
+            echo "wrangler.jsonc still contains REPLACE_WITH_D1_DATABASE_ID. Set a real D1 database ID before deploy."
+            exit 1
+          fi
+
+      - name: Build Cloudflare worker bundle
+        run: npm run cf:build
+
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
