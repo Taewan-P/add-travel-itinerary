@@ -18,7 +18,7 @@
     {
       "binding": "DB",
       "database_name": "travel-itinerary",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_id": "46104db6-993e-4095-9d9c-5e38904e8043",
       "migrations_dir": "drizzle"
     }
   ]
