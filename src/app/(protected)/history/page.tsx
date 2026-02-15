@@ -14,7 +14,18 @@ export default async function HistoryPage() {
     );
   }
 
-  const items = await listItineraries(session.user.email.toLowerCase());
+  let items;
+  try {
+    items = await listItineraries(session.user.email.toLowerCase());
+  } catch (error) {
+    console.error("Failed to load itinerary history", error);
+    return (
+      <div className="card">
+        <h2>Failed to load history</h2>
+        <p>Please try again later.</p>
+      </div>
+    );
+  }
 
   return <HistoryList initialItems={items} />;
 }

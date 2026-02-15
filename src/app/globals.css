@@ -112,6 +112,11 @@ td {
   font-weight: 600;
 }
 
+.status-pending {
+  color: #8a6200;
+  font-weight: 600;
+}
+
 .error {
   color: #a01616;
 }

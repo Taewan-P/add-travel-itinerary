@@ -188,4 +188,22 @@ describe("itinerary service", () => {
     const items = await listItineraries("user@example.com", deps);
     expect(items).toHaveLength(0);
   });
+
+  it("skips malformed JSON payloads when listing itineraries", async () => {
+    const repo = new InMemoryItineraryRepository();
+    const deps = buildDeps(repo);
+
+    await repo.createPending({
+      id: "itin_malformed_json",
+      kind: "hotel",
+      payloadJson: "{",
+      recipientEmail: "user@example.com",
+      createdByGoogleSub: "google-sub-1",
+      createdByEmail: "user@example.com",
+      createdAt: "2026-02-15T00:00:00.000Z",
+    });
+
+    const items = await listItineraries("user@example.com", deps);
+    expect(items).toHaveLength(0);
+  });
 });

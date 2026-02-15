@@ -100,7 +100,15 @@ export async function listItineraries(
 ): Promise<ItineraryListItem[]> {
   const rows = await deps.repository.listByEmail(email);
   return rows.reduce<ItineraryListItem[]>((items, row) => {
-    const parsed = createItinerarySchema.safeParse(JSON.parse(row.payloadJson));
+    let rawPayload: unknown;
+    try {
+      rawPayload = JSON.parse(row.payloadJson);
+    } catch {
+      console.warn(`Skipping itinerary ${row.id}: malformed JSON in payload`);
+      return items;
+    }
+
+    const parsed = createItinerarySchema.safeParse(rawPayload);
     if (!parsed.success) {
       console.warn(`Skipping itinerary ${row.id}: payload schema validation failed`);
       return items;

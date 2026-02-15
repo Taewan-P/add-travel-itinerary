@@ -12,8 +12,13 @@ type SendEmailResult = {
 };
 
 function getSetting(name: "RESEND_API_KEY" | "RESEND_FROM_EMAIL"): string {
-  const env = getCloudflareEnv();
-  const fromEnv = env[name];
+  let fromEnv: string | undefined;
+  try {
+    const env = getCloudflareEnv();
+    fromEnv = env[name];
+  } catch {
+    // Cloudflare bindings may be unavailable outside the worker runtime.
+  }
   const fromProcess = process.env[name];
   const value = fromEnv ?? fromProcess;
 

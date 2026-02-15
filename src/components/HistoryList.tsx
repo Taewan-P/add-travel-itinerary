@@ -72,7 +72,15 @@ export function HistoryList({ initialItems }: Props) {
             <tr key={item.id}>
               <td className="code">{item.id}</td>
               <td>{item.kind}</td>
-              <td className={item.deliveryStatus === "sent" ? "status-sent" : "status-failed"}>
+              <td
+                className={
+                  item.deliveryStatus === "sent"
+                    ? "status-sent"
+                    : item.deliveryStatus === "failed"
+                      ? "status-failed"
+                      : "status-pending"
+                }
+              >
                 {item.deliveryStatus}
               </td>
               <td>{item.createdAt}</td>
