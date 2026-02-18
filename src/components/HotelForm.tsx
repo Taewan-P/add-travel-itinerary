@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 
+import {
+  isoToLocalDateTimeInputValue,
+  localDateTimeInputValueToIso,
+} from "@/lib/date-time";
 import type { CreateItineraryResponse } from "@/lib/validation";
 
 const initialState = {
@@ -102,21 +106,27 @@ export function HotelForm() {
           />
         </label>
         <label>
-          Check-in (ISO 8601 with timezone)
+          Check-in
           <input
             required
-            placeholder="2027-04-11T16:00:00-08:00"
-            value={form.checkinDateIso}
-            onChange={(event) => update("checkinDateIso", event.target.value)}
+            type="datetime-local"
+            step={60}
+            value={isoToLocalDateTimeInputValue(form.checkinDateIso)}
+            onChange={(event) =>
+              update("checkinDateIso", localDateTimeInputValueToIso(event.target.value))
+            }
           />
         </label>
         <label>
-          Check-out (ISO 8601 with timezone)
+          Check-out
           <input
             required
-            placeholder="2027-04-13T11:00:00-08:00"
-            value={form.checkoutDateIso}
-            onChange={(event) => update("checkoutDateIso", event.target.value)}
+            type="datetime-local"
+            step={60}
+            value={isoToLocalDateTimeInputValue(form.checkoutDateIso)}
+            onChange={(event) =>
+              update("checkoutDateIso", localDateTimeInputValueToIso(event.target.value))
+            }
           />
         </label>
         <label>

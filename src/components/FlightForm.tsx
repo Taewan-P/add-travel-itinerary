@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 
+import {
+  isoToLocalDateTimeInputValue,
+  localDateTimeInputValueToIso,
+} from "@/lib/date-time";
 import type { CreateItineraryResponse } from "@/lib/validation";
 
 const initialState = {
@@ -133,12 +137,15 @@ export function FlightForm() {
           />
         </label>
         <label>
-          Departure Time (ISO 8601 with timezone)
+          Departure Time
           <input
             required
-            placeholder="2027-03-04T20:15:00-08:00"
-            value={form.departureTimeIso}
-            onChange={(event) => update("departureTimeIso", event.target.value)}
+            type="datetime-local"
+            step={60}
+            value={isoToLocalDateTimeInputValue(form.departureTimeIso)}
+            onChange={(event) =>
+              update("departureTimeIso", localDateTimeInputValueToIso(event.target.value))
+            }
           />
         </label>
         <label>
@@ -160,12 +167,15 @@ export function FlightForm() {
           />
         </label>
         <label>
-          Arrival Time (ISO 8601 with timezone)
+          Arrival Time
           <input
             required
-            placeholder="2027-03-05T06:30:00-05:00"
-            value={form.arrivalTimeIso}
-            onChange={(event) => update("arrivalTimeIso", event.target.value)}
+            type="datetime-local"
+            step={60}
+            value={isoToLocalDateTimeInputValue(form.arrivalTimeIso)}
+            onChange={(event) =>
+              update("arrivalTimeIso", localDateTimeInputValueToIso(event.target.value))
+            }
           />
         </label>
 
